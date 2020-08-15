@@ -13,7 +13,7 @@
     "url": "git+https://github.com/swat-hopper/hopper-backend.git"
   },
   "author": "Alejandro Ortiz Duque",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/swat-hopper/hopper-backend/issues"
   },
