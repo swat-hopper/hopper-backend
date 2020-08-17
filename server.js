@@ -99,25 +99,39 @@ app.get('/protected', util.ensureAuthenticated, function(req, res) {
 
 app.get('/usersave', util.ensureAuthenticated, async function(req, res, next) {
   const {user: data} = req;
-  const infoUser = {
-    id: data.id,
-    Name: data.displayName,
-    username: data.username,
-    email: data.emails[0].value,
-    avatar: data.photos[0].value
-  }
-  const email = data.emails[0].value
-  console.log(email);
+  console.log(`este es el email: ${data._json.email}`);
+  console.log(`este es el email: ${data._json.name}`);
+  try {
+    const infoUser = {
+      id: data.id,
+      displayName: data._json.name,
+      username: data.username,
+      email: data._json.email,
+      avatar: data.photos[0].value
+    }
+    const username = data.username
+    console.log(username);
+  
+    const findUsername = await User.findOne({username: username})
+    if(findUsername) {
+      res.redirect('/protected');
+    } else {
+      const newUser = new User(infoUser);
+      if(newUser.displayName === null) {
+        newUser.displayName = ''
+      }
+      if(newUser.email === null) {
+        newUser.email = ''
+      }
+      if(newUser.email === null) {
 
-  const findEmail = await User.findOne({email: email})
-  if(findEmail) {
-    res.redirect('/protected');
-  } else {
-    const newUser = new User(infoUser);
-    await newUser.save();
-    res.status(200).json({success: 'ok', info: [info]});
+      }
+      await newUser.save();
+      res.status(200).json({success: 'ok', info: [infoUser]});
+    }
+  } catch (error) {
+    
   }
-
 });
 
 module.exports = app;
