@@ -11,6 +11,8 @@ const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary');
 const { config } = require('./config/index');
 
+const User = require('./models/User')
+
 
 // Initialization
 const app = express();
@@ -67,7 +69,7 @@ app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/usersave');
   }
 );
 
@@ -81,7 +83,6 @@ app.get('/', function (req, res) {
   if (req.isAuthenticated()) {
     html += "<p>authenticated as user:</p>"
     html += "<pre>" + JSON.stringify(req.user, null, 4) + "</pre>";
-    // res.send(JSON.stringify(req.user,null, 4))
   }
 
   res.send(html);
@@ -93,7 +94,30 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/protected', util.ensureAuthenticated, function(req, res) {
-  res.send(req.user);
+  res.json({auth: true, msg: 'everithing is ok'});
+});
+
+app.get('/usersave', util.ensureAuthenticated, async function(req, res, next) {
+  const {user: data} = req;
+  const infoUser = {
+    id: data.id,
+    Name: data.displayName,
+    username: data.username,
+    email: data.emails[0].value,
+    avatar: data.photos[0].value
+  }
+  const email = data.emails[0].value
+  console.log(email);
+
+  const findEmail = await User.findOne({email: email})
+  if(findEmail) {
+    res.redirect('/protected');
+  } else {
+    const newUser = new User(infoUser);
+    await newUser.save();
+    res.status(200).json({success: 'ok', info: [info]});
+  }
+
 });
 
 module.exports = app;
