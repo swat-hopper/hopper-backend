@@ -3,7 +3,7 @@ const passport = require('passport');
 const session = require('express-session');
 const GithubStrategy = require('passport-github');
 const cors = require('cors');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const util = require('./utils/index');
 const multer = require('multer');
@@ -22,7 +22,7 @@ const app = express();
 passport.use(new GithubStrategy({
   clientID: config.clientId,
   clientSecret: config.clientSecret,
-  callbackURL: "http://localhost:3000/auth/github/callback"
+  callbackURL: "https://hopper-1.uc.r.appspot.com/auth/github/callback"
   },
   function(accessToken, refreshToken, profile, done) {
     return done(null, profile);
@@ -57,7 +57,7 @@ app.set('port', config.port);
 
 // Middlewares
 app.use(cors());
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
