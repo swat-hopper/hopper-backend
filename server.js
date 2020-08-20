@@ -10,7 +10,12 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary');
 const { config } = require('./config/index');
-
+const {
+  logErrors,
+  wrapErrors,
+  errorHandler,
+} = require('./utils/middleware/errorHandlers');
+const notFoundHandler = require('./utils/middleware/notFoundHandler');
 const User = require('./models/User')
 
 
@@ -133,5 +138,11 @@ app.get('/usersave', util.ensureAuthenticated, async function(req, res, next) {
     
   }
 });
+
+// middlewares by errors
+app.use(notFoundHandler);
+app.use(logErrors);
+app.use(wrapErrors);
+app.use(errorHandler);
 
 module.exports = app;
