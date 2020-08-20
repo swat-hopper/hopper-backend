@@ -6,6 +6,7 @@
   "scripts": {
     "borrar": "nodemon borrar.js",
     "dev": "nodemon index.js",
+    "build": "node index.js",
     "start": "node index.js"
   },
   "repository": {

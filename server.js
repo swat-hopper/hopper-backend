@@ -114,7 +114,7 @@ app.get('/usersave', util.ensureAuthenticated, async function(req, res, next) {
   
     const findUsername = await User.findOne({username: username})
     if(findUsername) {
-      res.redirect('/protected');
+      res.redirect('https://hopper-develop.netlify.app/');
     } else {
       const newUser = new User(infoUser);
       if(newUser.displayName === null) {
