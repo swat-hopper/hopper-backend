@@ -10,3 +10,7 @@ deploy:
   provider: gae
   keyfile: GCP_KEY_FILE
   project: GCP_PROJECT_ID
+  branches:
+    only:
+        - master
+        - dev
