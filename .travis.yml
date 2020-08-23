@@ -11,11 +11,13 @@ deploy:
   - provider: gae
     keyfile: $GCP_KEY_FILE
     project: $GCP_PROJECT_ID
+    skip_cleanup: true
     on:
         branch: master
   - provider: gae
     keyfile: $GCP_KEY_FILE
     project: $GCP_PROJECT_ID
     config: staging-app.yaml
+    skip_cleanup: true
     on:
         branch: dev
