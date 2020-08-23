@@ -9,13 +9,13 @@ before_install:
 
 deploy:
   - provider: gae
-    keyfile: GCP_KEY_FILE
-    project: GCP_PROJECT_ID
+    keyfile: $GCP_KEY_FILE
+    project: $GCP_PROJECT_ID
     on:
         branch: master
   - provider: gae
-    keyfile: GCP_KEY_FILE
-    project: GCP_PROJECT_ID
+    keyfile: $GCP_KEY_FILE
+    project: $GCP_PROJECT_ID
     config: staging-app.yaml
     on:
         branch: dev
