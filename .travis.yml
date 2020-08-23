@@ -1,0 +1,9 @@
+before_install:
+    - openssl aes-256-cbc -K $encrypted_7748a1005700_key -iv $encrypted_7748a1005700_iv -in gce.json.enc -out gce.json -d
+    - openssl aes-256-cbc -K $encrypted_7748a1005700_key -iv $encrypted_7748a1005700_iv -in app.yaml.enc -out app.yaml -d
+
+
+deploy:
+    provider: gae
+    keyfile: GCP_KEY_FILE
+    project: GCP_PROJECT_ID
