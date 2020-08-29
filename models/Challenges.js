@@ -5,12 +5,12 @@ const ChallengeSchema = new Schema(
   {
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "Users"
+      ref: "Users",
     },
     challengeInfo: {
       title: { type: String, maxlength: 280, require: true },
       description: { type: String, maxlength: 280, require: true },
-      tips:{type: Array },
+      tips: { type: Array },
       url: { type: String, require: true },
     },
   },
@@ -19,6 +19,6 @@ const ChallengeSchema = new Schema(
   }
 );
 
-const Challenge = mongoose.model('Challenges', ChallengeSchema);
+const Challenge = mongoose.model("Challenges", ChallengeSchema);
 
 module.exports = Challenge;

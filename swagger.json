@@ -1,0 +1,219 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Hopper",
+    "description": "API Hopper",
+    "termsOfService": "https://hopper-1.uc.r.appspot.com/",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://hopper-1.uc.r.appspot.com/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "challenges",
+      "description": "Everything about your challenges"
+    }
+  ],
+  "paths": {
+    "/challenges": {
+      "get": {
+        "tags": ["challenges"],
+        "summary": "get all challenges",
+        "description": "get all challenges, optional with params challenge",
+        "operationId": "getChallenges",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of challenge values",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit challenge of page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 15
+            }
+          },
+          {
+            "name": "difficulty",
+            "in": "query",
+            "description": "Difficulty challenges",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["easy", "medium", "hard"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError404"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Challenge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "uniqueItems": true,
+            "readOnly": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "subcategoryId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quantity": {
+            "type": "number",
+            "multipleOf": 0.1
+          },
+          "measureId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "urlImage": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "categoryId",
+          "subcategoryId",
+          "measureId",
+          "quantity",
+          "urlImage"
+        ],
+        "example": {
+          "title": "Nestle Condensed Milk",
+          "description": "Pack 2 cans of Nestle Condensed Milk.",
+          "categoryId": 1,
+          "subcategoryId": 2,
+          "quantity": 90,
+          "measureId": 4,
+          "urlImage": "https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/gr/images/product-images/img_large/00750105861787L.jpg",
+          "active": true
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "format": "int64"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "body": {
+            "type": "object",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "error": false,
+          "status": 200,
+          "body": [
+            {
+              "id": 1,
+              "data1": "result1",
+              "data2": "result2"
+            }
+          ]
+        }
+      },
+      "ApiError404": {
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 404,
+          "error": "Not Found",
+          "message": "Not Found"
+        }
+      }
+    }
+  }
+}
