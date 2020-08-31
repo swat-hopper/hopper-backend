@@ -19,9 +19,12 @@ const swaggerDoc = require('./swagger.json');
 
 const User = require('./models/User')
 
+const challengesApi = require('./routes/challenges')
+
 if (!config.dev) {
   agent.start();
 }
+
 
 // Initialization
 const app = express();
@@ -69,7 +72,6 @@ app.use(cors());
 // app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 
 // Routes
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
@@ -141,6 +143,9 @@ app.get('/usersave', util.ensureAuthenticated, async function(req, res, next) {
     next(error)
   }
 });
+
+// routes
+challengesApi(app)
 
 // middlewares by errors
 app.use(notFoundHandler);

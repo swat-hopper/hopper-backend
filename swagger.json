@@ -95,6 +95,54 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["challenges"],
+        "summary": "Add a new challenge",
+        "operationId": "createChallenges",
+        "requestBody": {
+          "description": "Create challenges",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Challenge"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError404"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -103,38 +151,30 @@
       "Challenge": {
         "type": "object",
         "properties": {
-          "id": {
+          "owner": {
             "type": "integer",
-            "uniqueItems": true,
-            "readOnly": true
+            "uniqueItems": true
           },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "categoryId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "subcategoryId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "quantity": {
-            "type": "number",
-            "multipleOf": 0.1
-          },
-          "measureId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "urlImage": {
-            "type": "string"
-          },
-          "active": {
-            "type": "boolean"
+          "challengeInfo": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "tips": {
+                "type": "array",
+                "items":{
+                  "type":"string"
+                }
+              }
+            },
+            "required": ["title", "description", "url"]
           },
           "createdAt": {
             "type": "string",
@@ -147,24 +187,14 @@
             "readOnly": true
           }
         },
-        "required": [
-          "title",
-          "description",
-          "categoryId",
-          "subcategoryId",
-          "measureId",
-          "quantity",
-          "urlImage"
-        ],
+        "required": ["challengeInfo"],
         "example": {
-          "title": "Nestle Condensed Milk",
-          "description": "Pack 2 cans of Nestle Condensed Milk.",
-          "categoryId": 1,
-          "subcategoryId": 2,
-          "quantity": 90,
-          "measureId": 4,
-          "urlImage": "https://res.cloudinary.com/walmart-labs/image/upload/w_960,dpr_auto,f_auto,q_auto:best/gr/images/product-images/img_large/00750105861787L.jpg",
-          "active": true
+          "owner": "5f3aad575418c507740a8f4b",
+          "challengeInfo": {
+            "title": "Reto CSS 1",
+            "description": "Este es un reto de CSS 1",
+            "url": "https://i0.wp.com/css-tricks.com/wp-content/uploads/2020/04/Screen-Shot-2020-04-15-at-6.21.17-AM.png"
+          }
         }
       },
       "ApiResponse": {
@@ -196,6 +226,25 @@
         }
       },
       "ApiError404": {
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 404,
+          "error": "Not Found",
+          "message": "Not Found"
+        }
+      },
+      "ApiError400": {
         "properties": {
           "statusCode": {
             "type": "integer",
