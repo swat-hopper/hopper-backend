@@ -12,19 +12,7 @@ function challengesApi(app) {
   app.use('/api/challenges', router);
   const challengesService = new ChallengesService();
 
-  router.get('/', validationHandler(filterSchema, 'query'), async function (
-    req,
-    res,
-    next
-  ) {
-    try {
-      const challeges = {};
-
-      response.success(req, res, 'challeges listed', 200, challeges);
-    } catch (error) {
-      next(error);
-    }
-  });
+  router.get('/', validationHandler(filterSchema, 'query'), getChallenges);
 
   router.post('/', validationHandler(createChallengesSchema), createdChallege);
 
@@ -41,6 +29,16 @@ function challengesApi(app) {
       } catch (error) {
         next(error);
       }
+    }
+  }
+
+  async function getChallenges(req, res, next){
+    try {
+      const challenges = await challengesService.getChallenges(req.query);
+
+      response.success(req, res, 'challenge listed', 200, challenges);
+    } catch (error) {
+      next(error);
     }
   }
 }

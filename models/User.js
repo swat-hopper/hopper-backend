@@ -8,12 +8,10 @@ const UserSchema = new mongoose.Schema({
   email: { type: String},
   avatar: { type: String},
   rol: { type: String, default: 'student'},
-  // createdAt: { type: Date},
-  // updatedAt: { type: Date}
 }, {
   timestamps: true
 });
 
-const User = mongoose.model('Users', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;

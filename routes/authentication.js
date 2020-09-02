@@ -15,6 +15,11 @@ function authenticationApi(app) {
       res.json(req.user);
     }
   );
+
+  app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+  });
 }
 
 module.exports = authenticationApi;

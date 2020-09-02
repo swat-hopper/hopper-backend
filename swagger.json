@@ -169,12 +169,16 @@
               },
               "tips": {
                 "type": "array",
-                "items":{
-                  "type":"string"
+                "items": {
+                  "type": "string"
                 }
+              },
+              "difficulty": {
+                "type": "string",
+                "enum": ["easy", "medium", "hard"]
               }
             },
-            "required": ["title", "description", "url"]
+            "required": ["title", "description", "url", "difficulty"]
           },
           "createdAt": {
             "type": "string",
@@ -193,6 +197,7 @@
           "challengeInfo": {
             "title": "Reto CSS 1",
             "description": "Este es un reto de CSS 1",
+            "difficulty":"easy",
             "url": "https://i0.wp.com/css-tricks.com/wp-content/uploads/2020/04/Screen-Shot-2020-04-15-at-6.21.17-AM.png"
           }
         }
