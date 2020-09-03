@@ -1,16 +1,17 @@
 const joi = require('joi');
 const { pageSchema, limitSchema, idSchema } = require('./general');
 const Joi = require('joi');
+const titleSchema = joi.string().max(280);
+const descriptionSchema = joi.string().max(280);
+const urlSchema = joi.string();
+const difficultySchema = joi.string().valid('easy', 'medium', 'hard');
+const tipsSchema = joi.array().items(joi.string().required());
 
 const filterSchema = {
   page: pageSchema,
   limit: limitSchema,
+  difficulty: difficultySchema
 };
-
-const titleSchema = joi.string().max(280);
-const descriptionSchema = joi.string().max(280);
-const urlSchema = joi.string();
-const tipsSchema = joi.array().items(joi.string().required());
 
 const createChallengesSchema = {
   owner: idSchema.required(),
@@ -19,6 +20,7 @@ const createChallengesSchema = {
     description: descriptionSchema.required(),
     tips: tipsSchema,
     url: urlSchema.required(),
+    difficulty: difficultySchema.required()
   }).required(),
 };
 
