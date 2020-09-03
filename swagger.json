@@ -144,6 +144,39 @@
           }
         }
       }
+    },
+    "/challenges/{challengeId}": {
+      "get": {
+        "tags": [
+          "challenges"
+        ],
+        "summary": "Detail challenge",
+        "description": "Get the detail of a challenge based on a challenge id",
+        "operationId": "getChallenge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "challenge id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
