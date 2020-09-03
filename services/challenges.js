@@ -32,6 +32,21 @@ class ChallengesService {
         });
     });
   }
+
+  async getChallenge(id) {
+    return new Promise((resolve, reject) => {
+      this.Model.findById(id)
+        .populate('owner', 'displayName username avatar')
+        .exec((err, populated) => {
+          if (err) {
+            reject(err);
+            return false;
+          }
+
+          resolve(populated);
+        });
+    });
+  }
 }
 
 module.exports = ChallengesService;
