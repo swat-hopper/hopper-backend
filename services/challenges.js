@@ -47,6 +47,13 @@ class ChallengesService {
         });
     });
   }
+
+  async editChallenge({ challengeId, challenge }) {
+    let query = { _id: challengeId };
+    await this.Model.updateOne(query, challenge);
+    let challengeUpdated = this.Model.findOne(query);
+    return challengeUpdated;
+  }
 }
 
 module.exports = ChallengesService;

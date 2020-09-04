@@ -4,6 +4,7 @@ const response = require('../utils/network/response');
 const {
   filterSchema,
   createChallengesSchema,
+  updateChallengesSchema,
 } = require('../utils/schemas/challenges');
 const ChallengesService = require('../services/challenges');
 const { idSchema } = require('../utils/schemas/general');
@@ -19,6 +20,11 @@ function challengesApi(app) {
     '/:challengeId',
     validationHandler({ challengeId: idSchema }, 'params'),
     getChallenge
+  );
+  router.patch(
+    '/:challengeId',
+    validationHandler(updateChallengesSchema),
+    updateChallenge
   );
 
   async function createdChallege(req, res, next) {
@@ -54,6 +60,22 @@ function challengesApi(app) {
       response.success(req, res, 'challenge retrieved', 200, challenge);
     } catch (err) {
       next(err);
+    }
+  }
+
+  async function updateChallenge(req, res, next) {
+    const { body: challenge } = req;
+    const { challengeId } = req.params;
+
+    try {
+      const challengeUpdated = await challengesService.editChallenge({
+        challengeId,
+        challenge,
+      });
+
+      response.success(req, res, 'challege updated', 201, challengeUpdated);
+    } catch (error) {
+      next(error);
     }
   }
 }
