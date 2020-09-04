@@ -4,6 +4,7 @@ const response = require('../utils/network/response');
 const {
   filterSchema,
   createChallengesSchema,
+  updateChallengesSchema,
 } = require('../utils/schemas/challenges');
 const ChallengesService = require('../services/challenges');
 const { idSchema } = require('../utils/schemas/general');
@@ -15,10 +16,20 @@ function challengesApi(app) {
 
   router.get('/', validationHandler(filterSchema, 'query'), getChallenges);
   router.post('/', validationHandler(createChallengesSchema), createdChallege);
+  router.delete(
+    '/:challengeId',
+    validationHandler({ challengeId: idSchema }, 'params'),
+    deletedChallenge
+  );
   router.get(
     '/:challengeId',
     validationHandler({ challengeId: idSchema }, 'params'),
     getChallenge
+  );
+  router.patch(
+    '/:challengeId',
+    validationHandler(updateChallengesSchema),
+    updateChallenge
   );
 
   async function createdChallege(req, res, next) {
@@ -52,6 +63,32 @@ function challengesApi(app) {
       const { challengeId } = req.params;
       const challenge = await challengesService.getChallenge(challengeId);
       response.success(req, res, 'challenge retrieved', 200, challenge);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async function updateChallenge(req, res, next) {
+    const { body: challenge } = req;
+    const { challengeId } = req.params;
+
+    try {
+      const challengeUpdated = await challengesService.editChallenge({
+        challengeId,
+        challenge,
+      });
+
+      response.success(req, res, 'challege updated', 201, challengeUpdated);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async function deletedChallenge(req, res, next) {
+    try {
+      const { challengeId } = req.params;
+      const challenge = await challengesService.deletedChallenge({challengeId});
+      response.success(req, res, 'challenge deleted', 200, challenge);
     } catch (err) {
       next(err);
     }

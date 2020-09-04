@@ -24,7 +24,18 @@ const createChallengesSchema = {
   }).required(),
 };
 
+const updateChallengesSchema = {
+  challengeInfo: Joi.object({
+    title: titleSchema,
+    description: descriptionSchema,
+    tips: tipsSchema,
+    url: urlSchema,
+    difficulty: difficultySchema,
+  }).required(),
+}
+
 module.exports = {
   filterSchema,
   createChallengesSchema,
+  updateChallengesSchema,
 };
