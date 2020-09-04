@@ -54,6 +54,12 @@ class ChallengesService {
     let challengeUpdated = this.Model.findOne(query);
     return challengeUpdated;
   }
+
+  async deletedChallenge({ challengeId }) {
+    let query = { _id: challengeId };
+    await this.Model.deleteOne(query);
+    return challengeId;
+  }
 }
 
 module.exports = ChallengesService;

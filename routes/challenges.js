@@ -16,6 +16,11 @@ function challengesApi(app) {
 
   router.get('/', validationHandler(filterSchema, 'query'), getChallenges);
   router.post('/', validationHandler(createChallengesSchema), createdChallege);
+  router.delete(
+    '/:challengeId',
+    validationHandler({ challengeId: idSchema }, 'params'),
+    deletedChallenge
+  );
   router.get(
     '/:challengeId',
     validationHandler({ challengeId: idSchema }, 'params'),
@@ -76,6 +81,16 @@ function challengesApi(app) {
       response.success(req, res, 'challege updated', 201, challengeUpdated);
     } catch (error) {
       next(error);
+    }
+  }
+
+  async function deletedChallenge(req, res, next) {
+    try {
+      const { challengeId } = req.params;
+      const challenge = await challengesService.deletedChallenge({challengeId});
+      response.success(req, res, 'challenge deleted', 200, challenge);
+    } catch (err) {
+      next(err);
     }
   }
 }
