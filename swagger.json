@@ -1,62 +1,224 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
     "title": "Hopper",
+    "description": "API Hopper",
+    "termsOfService": "https://hopper-1.uc.r.appspot.com/",
     "license": {
-      "name": "MIT"
-    }
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://petstore.swagger.io/v1"
+      "url": "https://hopper-1.uc.r.appspot.com/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "challenges",
+      "description": "Everything about your challenges"
     }
   ],
   "paths": {
-    "/user": {
+    "/challenges": {
       "get": {
-        "summary": "Details about a user",
-        "operationId": "listUser",
-        "tags": [
-          "user"
-        ],
+        "tags": ["challenges"],
+        "summary": "get all challenges",
+        "description": "get all challenges, optional with params challenge",
+        "operationId": "getChallenges",
         "parameters": [
           {
-            "name": "id",
+            "name": "page",
             "in": "query",
-            "description": "ID of the user",
-            "required": true,
+            "description": "Page of challenge values",
+            "required": false,
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit challenge of page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 15
+            }
+          },
+          {
+            "name": "difficulty",
+            "in": "query",
+            "description": "Difficulty challenges",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["easy", "medium", "hard"]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Details about a user",
-            "headers": {
-              "x-next": {
-                "description": "A link to the next page of responses",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
+            "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
                 }
               }
             }
           },
-          "default": {
-            "description": "unexpected error",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiError400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["challenges"],
+        "summary": "Add a new challenge",
+        "operationId": "createChallenges",
+        "requestBody": {
+          "description": "Create challenges",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Challenge"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/challenges/{challengeId}": {
+      "get": {
+        "tags": [
+          "challenges"
+        ],
+        "summary": "Detail challenge",
+        "description": "Get the detail of a challenge based on a challenge id",
+        "operationId": "getChallenge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "challenge id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["challenges"],
+        "summary": "Update a challenge",
+        "operationId": "updateChallenges",
+        "requestBody": {
+          "description": "Update challenges",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Challenge"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError404"
                 }
               }
             }
@@ -67,39 +229,124 @@
   },
   "components": {
     "schemas": {
-      "User": {
+      "Challenge": {
         "type": "object",
-        "required": [
-          "id",
-          "name"
-        ],
         "properties": {
-          "id": {
+          "owner": {
             "type": "integer",
-            "format": "int64"
+            "uniqueItems": true
           },
-          "name": {
-            "type": "string"
+          "challengeInfo": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "tips": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "difficulty": {
+                "type": "string",
+                "enum": ["easy", "medium", "hard"]
+              }
+            },
+            "required": ["title", "description", "url", "difficulty"]
           },
-          "tag": {
-            "type": "string"
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "required": ["challengeInfo"],
+        "example": {
+          "owner": "5f3aad575418c507740a8f4b",
+          "challengeInfo": {
+            "title": "Reto CSS 1",
+            "description": "Este es un reto de CSS 1",
+            "difficulty":"easy",
+            "url": "https://i0.wp.com/css-tricks.com/wp-content/uploads/2020/04/Screen-Shot-2020-04-15-at-6.21.17-AM.png"
           }
         }
       },
-      "Error": {
+      "ApiResponse": {
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
         "properties": {
-          "code": {
+          "error": {
+            "type": "boolean",
+            "format": "int64"
+          },
+          "status": {
             "type": "integer",
+            "format": "int64"
+          },
+          "body": {
+            "type": "object",
             "format": "int32"
+          }
+        },
+        "example": {
+          "error": false,
+          "status": 200,
+          "body": [
+            {
+              "id": 1,
+              "data1": "result1",
+              "data2": "result2"
+            }
+          ]
+        }
+      },
+      "ApiError404": {
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "error": {
+            "type": "string"
           },
           "message": {
             "type": "string"
           }
+        },
+        "example": {
+          "statusCode": 404,
+          "error": "Not Found",
+          "message": "Not Found"
+        }
+      },
+      "ApiError400": {
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 404,
+          "error": "Not Found",
+          "message": "Not Found"
         }
       }
     }
