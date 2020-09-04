@@ -224,6 +224,37 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "challenges"
+        ],
+        "summary": "Deleted challenge",
+        "description": "Deleted of a challenge based on a challenge id",
+        "operationId": "deletedChallenge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challengeId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "challenge id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
